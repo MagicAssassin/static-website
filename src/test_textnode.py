@@ -59,6 +59,30 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(html_node.tag, "img")
         self.assertEqual(html_node.value, "")
         self.assertEqual(html_node.props, {"src": "www.boot.dev", "alt":"This is a text node"})
+    
+    def test_split_nodes_1(self):
+        node = TextNode("This is text with a `code block` word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+
+        self.assertEqual(new_nodes, [TextNode("This is text with a ", TextType.PLAIN),TextNode("code block", TextType.CODE),TextNode(" word", TextType.PLAIN)])
+    
+    def test_split_nodes_2(self):
+        node = TextNode("This is text with a **Bold Text** word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+
+        self.assertEqual(new_nodes, [TextNode("This is text with a ", TextType.PLAIN),TextNode("Bold Text", TextType.BOLD),TextNode(" word", TextType.PLAIN)])
+
+    def test_split_nodes_3(self):
+        node = TextNode("This is text with a _italic word_ word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
+
+        self.assertEqual(new_nodes, [TextNode("This is text with a ", TextType.PLAIN),TextNode("italic word", TextType.ITALIC),TextNode(" word", TextType.PLAIN)])
+
+    def test_split_nodes_4(self):
+        node = TextNode("This is text with a `code block` word and another `Another Code Block`", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        print(new_nodes)
+        self.assertEqual(new_nodes, [TextNode("This is text with a ", TextType.PLAIN),TextNode("code block", TextType.CODE),TextNode(" word and another ", TextType.PLAIN),TextNode("Another Code Block", TextType.CODE)])
 
 if __name__ == "__main__":
     unittest.main()

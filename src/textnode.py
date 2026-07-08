@@ -40,3 +40,60 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     else:
         raise Exception("TEXT TYPE IS NOT VALID")
     
+
+def split_nodes_delimiter(old_nodes: list[TextNode], delimiter: str, text_type: TextType) -> list[TextNode]:
+    new_nodes = []
+    has_split = False
+
+    if old_nodes:
+        for node in old_nodes:
+            if node.text_type == TextType.PLAIN:
+                text_list = node.text.split(delimiter, maxsplit=2)
+                if len(text_list) == 3:
+                    has_split = True
+                    new_nodes.append(TextNode(text_list[0], text_type=TextType.PLAIN))
+                    new_nodes.append(TextNode(text_list[1], text_type=text_type))
+                    if text_list[2] != "":
+                        new_nodes.append(TextNode(text_list[2], text_type=TextType.PLAIN))
+                elif len(text_list) == 1:
+                    new_nodes.append(node)
+                else:
+                    raise Exception("NO CLOSING DELIMETER")
+                
+            else:
+                new_nodes.append(node)
+        
+        if has_split:
+            return split_nodes_delimiter(new_nodes, delimiter, text_type)
+        else:
+            return new_nodes
+
+    else:
+        return []
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
