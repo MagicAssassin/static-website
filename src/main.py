@@ -1,12 +1,21 @@
+import re
 from textnode import *
 
 
 def main():
-    text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
-    matches = extract_markdown_links(text)
-    print(matches)
-    text = text.split(f"[{matches[0][0]}]({matches[0][1]})", 1)
+    md = '''1. This sadkjhd
+2. Another Item
+3. Third Item'''
 
-    print(text)
+    temp_list = md.split("\n")
+    quote_check = True
+    print(temp_list)
+    for i in range(len(temp_list)):
+        print(temp_list[i])
+        if not temp_list[i].startswith(f"{i+1}. "):
+            quote_check = False
+    
+    print(quote_check)
+
 
 main()
