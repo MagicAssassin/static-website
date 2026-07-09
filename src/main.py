@@ -1,4 +1,5 @@
 import os, shutil
+from pathlib import Path
 from textnode import *
 from mdtohtml import *
 from blocknode import *
@@ -25,8 +26,9 @@ def copy_file_to_public(static_start_path, public_start_path, list_of_files):
             copy_file_to_public(static_full_path, public_full_path, dir_file_list)
 
 def extract_title(markdown: str):
-    if markdown.startswith("# "):
-        return markdown[2:]
+    markdown_list = markdown.split("\n")
+    if markdown_list[0].startswith("# "):
+        return markdown_list[0][2:]
     else:
         raise Exception("No Title")
 
@@ -48,10 +50,29 @@ def generate_page(from_path, template_path, dest_path):
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
     with open(dest_path, "w") as file:
-        file.write(template_content) 
+        file.write(template_content)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    list_of_files = os.listdir(dir_path_content)
+    for i in list_of_files:
+        full_content_path = os.path.join(dir_path_content, i)
+        full_public_path = os.path.join(dest_dir_path, i)
+        if os.path.isfile(full_content_path):
+            i = Path(i)
+            new_file = i.with_suffix(".html")
+            full_public_path_html = os.path.join(dest_dir_path, new_file)
+            generate_page(from_path=full_content_path, template_path=template_path, dest_path=full_public_path_html)
+        else:
+            os.mkdir(full_public_path)
+            generate_pages_recursive(full_content_path, template_path, full_public_path)
 
 def main():
     copy_static_folder()
-    generate_page("content/index.md","template.html","public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
+    #generate_page("content/index.md","template.html","public/index.html")
+    #generate_page("content/blog/glorfindel/index.md","template.html","public/blog/glorfindel/index.html")
+    #generate_page("content/blog/tom/index.md","template.html","public/blog/tom/index.html")
+    #generate_page("content/blog/majesty/index.md","template.html","public/blog/majesty/index.html")
+    #generate_page("content/contact/index.md","template.html","public/contact/index.html")
 
 main()
