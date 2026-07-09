@@ -25,19 +25,6 @@ class TextNode():
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type.value}, {self.URL})"
 
-def markdown_to_blocks(markdown):
-    if markdown:
-        new_list=[]
-
-        markdown = markdown.split("\n\n")
-        for i in markdown:
-            new_list.append(i.strip("\n "))
-        
-        return new_list
-
-    else:
-        return []
-
 def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == TextType.PLAIN:
         return LeafNode(tag=None, value=text_node.text)

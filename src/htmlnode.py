@@ -36,10 +36,7 @@ class ParentNode(HTMLNode):
         else:
             the_str = f'<{self.tag}{self.props_to_html()}>'
             for child in self.children:
-                if child.children is None or child.children == []:
-                    the_str += f'{child.to_html()}'
-                else:
-                    the_str += child.to_html()
+                the_str += f'{child.to_html()}'
             
             the_str += f'</{self.tag}>'
 
