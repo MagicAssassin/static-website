@@ -64,7 +64,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><blockquote><p> This is a QUOTE</p><p>This is another QUOTE</p></blockquote></div>",
+            "<div><blockquote>This is a QUOTE\nThis is another QUOTE</blockquote></div>",
         )
     
     def test_ordered_list(self):
@@ -101,7 +101,6 @@ This is another paragraph with [link](www.boot.dev) and ![image](somthing) plus 
 
         node = markdown_to_html_node(md)
         html = node.to_html()
-        print(html)
         self.assertEqual(
             html,
             '<div><h2>This is <b>bolded heading</b></h2><p>This is some random paragraph that has <i>italic text</i></p><ul><li>first</li><li>second</li></ul><p>This is another paragraph with <a href="www.boot.dev">link</a> and <img src="somthing" alt="image"></img> plus <b>bold</b> with <i>italic</i></p></div>',

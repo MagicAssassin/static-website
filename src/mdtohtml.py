@@ -31,8 +31,14 @@ def markdown_to_html_node(markdown):
             md_parent_nodes.append(parent_node)
         
         elif block_type == BlockType.QUOTE:
-            paragraph_node_list = quote_helper(block=block)
-            parent_node = ParentNode(tag="blockquote", children=paragraph_node_list)
+            #paragraph_node_list = quote_helper(block=block)
+            #parent_node = ParentNode(tag="blockquote", children=paragraph_node_list)
+            #md_parent_nodes.append(parent_node)
+
+            inline_list = quote_helper(block=block)
+            block = "\n".join(inline_list)
+            list_of_inline_html_node = text_to_childrent_html_node_list(block)
+            parent_node = ParentNode(tag="blockquote", children=list_of_inline_html_node)
             md_parent_nodes.append(parent_node)
         
         elif block_type == BlockType.UNORDERED_LIST:
@@ -77,15 +83,20 @@ def determin_heading_type(text: str) -> int:
         raise Exception("INVALID HEADING TYPE")
 
 def quote_helper(block):
-    list_of_inline_text = block.split("\n")
-    p_list_nodes = []
+    list_of_inline_text: list[str] = block.split("\n")
+    new_list_of_inline_text = []
+    #p_list_nodes = []
     for inline_text in list_of_inline_text:
-        inline_text = inline_text[1:]
-        list_of_inline_html_node = text_to_childrent_html_node_list(inline_text)
-        paragraph_node = ParentNode(tag="p", children=list_of_inline_html_node)
-        p_list_nodes.append(paragraph_node)
+        if inline_text.startswith("> "):
+            inline_text = inline_text[2:]
+        else:
+            inline_text = inline_text[1:]
+        new_list_of_inline_text.append(inline_text)
+        #list_of_inline_html_node = text_to_childrent_html_node_list(inline_text)
+        #paragraph_node = ParentNode(tag="p", children=list_of_inline_html_node)
+        #p_list_nodes.append(paragraph_node)
     
-    return p_list_nodes
+    return new_list_of_inline_text
 
 def list_helper(block, list_type):
     if list_type == BlockType.UNORDERED_LIST:
