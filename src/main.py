@@ -46,9 +46,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
 
     template_content = template_content.replace('{{ Title }}', the_title)
     template_content = template_content.replace('{{ Content }}', html_string)
-    if basepath != "":
-        template_content = template_content.replace('href="/', f'href="{basepath}')
-        template_content = template_content.replace('src="/', f'src="{basepath}')
+    template_content = template_content.replace('href="/', f'href="{basepath}')
+    template_content = template_content.replace('src="/', f'src="{basepath}')
 
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
@@ -74,12 +73,12 @@ def main():
     if len(all_arguments_list) > 1:
         first_argument = all_arguments_list[1]
     else:
-        first_argument = ""
+        first_argument = "/"
 
     print(first_argument)
 
     copy_static_folder()
-    generate_pages_recursive(f"{first_argument}content", f"{first_argument}template.html", f"{first_argument}docs", first_argument)
+    generate_pages_recursive("content", "template.html", "docs", first_argument)
     #generate_page("content/index.md","template.html","public/index.html")
     #generate_page("content/blog/glorfindel/index.md","template.html","public/blog/glorfindel/index.html")
     #generate_page("content/blog/tom/index.md","template.html","public/blog/tom/index.html")
